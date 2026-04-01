@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (large / raw only)
+data/
+datasets/
+*.npy
+*.npz
+
+# Models / outputs
+models/
+checkpoints/
+*.h5
+*.pt
+*.pth
+
+# Logs / results
+logs/
+*.log
+figure_results.png
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Project-specific (keep only if real)
+.glasauer_eeg_project/
+
+# Downloads (fix name if needed)
+download (1)/

@@ -1,0 +1,10 @@
+numpy
+scipy
+pandas
+matplotlib
+scikit-learn
+tensorflow==2.12
+h5py
+mne
+seaborn
+tqdm

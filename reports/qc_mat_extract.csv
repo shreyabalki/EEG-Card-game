@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 status,session,file,data_shape,labels_shape,t_shape,t_min,t_max,t_monotonic,n_trials,n_time,n_chan,n_third_dim,labels_nan_count
 ok,1,data\raw\sessionevents01.mat,"(801, 32, 3, 249)","(249, 8)","(801,)",-0.8,0.8,True,249,801,32,3,0
 ok,2,data\raw\sessionevents02.mat,"(801, 32, 3, 252)","(252, 8)","(801,)",-0.8,0.8,True,252,801,32,3,0
@@ -21,3 +22,28 @@ ok,19,data\raw\sessionevents19.mat,"(801, 32, 3, 95)","(95, 8)","(801,)",-0.8,0.
 ok,20,data\raw\sessionevents20.mat,"(801, 32, 3, 261)","(261, 8)","(801,)",-0.8,0.8,True,261,801,32,3,0
 ok,21,data\raw\sessionevents21.mat,"(801, 32, 3, 273)","(273, 8)","(801,)",-0.8,0.8,True,273,801,32,3,0
 ok,22,data\raw\sessionevents22.mat,"(801, 32, 3, 219)","(219, 8)","(801,)",-0.8,0.8,True,219,801,32,3,0
+=======
+status,session,file,data_shape,labels_shape,t_shape,t_min,t_max,t_monotonic,n_trials,n_time,n_chan,n_third_dim,labels_nan_count
+ok,1,data\raw\sessionevents01.mat,"(801, 32, 3, 249)","(249, 8)","(801,)",-0.8,0.8,True,249,801,32,3,0
+ok,2,data\raw\sessionevents02.mat,"(801, 32, 3, 252)","(252, 8)","(801,)",-0.8,0.8,True,252,801,32,3,0
+ok,3,data\raw\sessionevents03.mat,"(801, 32, 3, 237)","(237, 8)","(801,)",-0.8,0.8,True,237,801,32,3,0
+ok,4,data\raw\sessionevents04.mat,"(801, 32, 3, 225)","(225, 8)","(801,)",-0.8,0.8,True,225,801,32,3,0
+ok,5,data\raw\sessionevents05.mat,"(801, 32, 3, 276)","(276, 8)","(801,)",-0.8,0.8,True,276,801,32,3,0
+ok,6,data\raw\sessionevents06.mat,"(801, 32, 3, 222)","(222, 8)","(801,)",-0.8,0.8,True,222,801,32,3,0
+ok,7,data\raw\sessionevents07.mat,"(801, 32, 3, 213)","(213, 8)","(801,)",-0.8,0.8,True,213,801,32,3,0
+ok,8,data\raw\sessionevents08.mat,"(801, 32, 3, 192)","(192, 8)","(801,)",-0.8,0.8,True,192,801,32,3,0
+ok,9,data\raw\sessionevents09.mat,"(801, 32, 3, 270)","(270, 8)","(801,)",-0.8,0.8,True,270,801,32,3,0
+ok,10,data\raw\sessionevents10.mat,"(801, 32, 3, 234)","(234, 8)","(801,)",-0.8,0.8,True,234,801,32,3,0
+ok,11,data\raw\sessionevents11.mat,"(801, 32, 3, 177)","(177, 8)","(801,)",-0.8,0.8,True,177,801,32,3,0
+ok,12,data\raw\sessionevents12.mat,"(801, 32, 3, 204)","(204, 8)","(801,)",-0.8,0.8,True,204,801,32,3,0
+ok,13,data\raw\sessionevents13.mat,"(801, 32, 3, 225)","(225, 8)","(801,)",-0.8,0.8,True,225,801,32,3,0
+ok,14,data\raw\sessionevents14.mat,"(801, 32, 3, 195)","(195, 8)","(801,)",-0.8,0.8,True,195,801,32,3,0
+ok,15,data\raw\sessionevents15.mat,"(801, 32, 3, 288)","(288, 8)","(801,)",-0.8,0.8,True,288,801,32,3,0
+ok,16,data\raw\sessionevents16.mat,"(801, 32, 3, 243)","(243, 8)","(801,)",-0.8,0.8,True,243,801,32,3,0
+ok,17,data\raw\sessionevents17.mat,"(801, 32, 3, 222)","(222, 8)","(801,)",-0.8,0.8,True,222,801,32,3,0
+ok,18,data\raw\sessionevents18.mat,"(801, 32, 3, 228)","(228, 8)","(801,)",-0.8,0.8,True,228,801,32,3,0
+ok,19,data\raw\sessionevents19.mat,"(801, 32, 3, 95)","(95, 8)","(801,)",-0.8,0.8,True,95,801,32,3,0
+ok,20,data\raw\sessionevents20.mat,"(801, 32, 3, 261)","(261, 8)","(801,)",-0.8,0.8,True,261,801,32,3,0
+ok,21,data\raw\sessionevents21.mat,"(801, 32, 3, 273)","(273, 8)","(801,)",-0.8,0.8,True,273,801,32,3,0
+ok,22,data\raw\sessionevents22.mat,"(801, 32, 3, 219)","(219, 8)","(801,)",-0.8,0.8,True,219,801,32,3,0
+>>>>>>> 1733f74 (first commit)
