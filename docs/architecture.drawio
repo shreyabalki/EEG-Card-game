@@ -1,0 +1,38 @@
+<mxfile host="app.diagrams.net" modified="2026-04-01T00:00:00.000Z" agent="codex" version="24.7.17" type="device">
+  <diagram id="eeg-arch" name="EEG Pipeline">
+    <mxGraphModel dx="1240" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="raw" value="Raw MAT Sessions&#xa;sessionevents01..22.mat" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="220" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="extract" value="Extraction + QC&#xa;mat_to_csv_all_sessions.py" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="330" y="60" width="280" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="reports" value="Reports&#xa;qc_mat_extract.csv&#xa;labels_uniques_top30.xlsx" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="690" y="40" width="270" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="dataset" value="Dataset Engineering&#xa;prepare_dataset_v3.py&#xa;build_dataset.py (legacy)" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="330" y="210" width="280" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="npz" value="NPZ Outputs&#xa;v4_eventsplit_*&#xa;dataset_role_eventtype.npz" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="690" y="210" width="270" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="train" value="Model Training&#xa;train_eval_v3.py&#xa;CNN + Transformer" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="210" width="250" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="deliver" value="Deliverables&#xa;metrics CSV + checkpoints" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#111111;fillColor=#ffffff;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="360" width="250" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="raw" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="extract" target="reports"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="extract" target="dataset"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="dataset" target="npz"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="npz" target="train"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;strokeColor=#111111;" edge="1" parent="1" source="train" target="deliver"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

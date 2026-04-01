@@ -1,0 +1,134 @@
+:root {
+  --bg: #f5f5f2;
+  --paper: #fff;
+  --ink: #111;
+  --muted: #4b4b4b;
+  --grid: #d8d8d8;
+  --accent: #d50000;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+.block {
+  background: var(--paper);
+  border: 1px solid var(--grid);
+  padding: 20px;
+}
+
+.hero {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.kicker {
+  grid-column: 1 / span 3;
+  font-size: 0.8rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  grid-column: 1 / span 9;
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  line-height: .95;
+  font-weight: 700;
+}
+
+.hero-note {
+  grid-column: 10 / -1;
+  font-size: 0.95rem;
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.twocol {
+  grid-column: span 6;
+}
+
+.full { grid-column: 1 / -1; }
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.skills div {
+  border-top: 2px solid var(--ink);
+  padding-top: 8px;
+  font-size: 0.95rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--grid);
+  font-size: 0.94rem;
+}
+
+th { font-weight: 700; }
+
+.diagram {
+  width: 100%;
+  border: 1px solid var(--grid);
+  background: #fff;
+  padding: 8px;
+}
+
+.footer {
+  margin-top: 24px;
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+.highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .twocol,
+  .kicker,
+  h1,
+  .hero-note { grid-column: 1 / -1; }
+  .skills { grid-template-columns: 1fr; }
+}
