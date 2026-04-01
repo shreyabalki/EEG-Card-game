@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EEG Card Game — Portfolio Case Study</title>
+  <meta name="description" content="Swiss-style portfolio case study for EEG Card Game ML project." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="grid block hero">
+      <div class="kicker">Portfolio Case Study · Applied ML · EEG</div>
+      <h1>EEG Card Game<br/>Decision Intelligence</h1>
+      <p class="hero-note">
+        I designed and implemented an end-to-end EEG machine learning workflow that turns raw multi-player brain-signal sessions into role prediction models.
+        The system is built for reproducible research and readable engineering.
+      </p>
+    </section>
+
+    <section class="grid" style="margin-top:18px;">
+      <article class="block twocol">
+        <h2 class="section-title">Project Idea</h2>
+        <p>
+          During a 3-player card game, each event contains EEG from all players. The challenge is to classify each player's role:
+          <span class="highlight">played</span>, <span class="highlight">next/current</span>, or <span class="highlight">observer</span>.
+        </p>
+        <p>
+          This mirrors real-world applied ML: noisy sensors, event context, class imbalance, and strict leakage prevention.
+        </p>
+      </article>
+
+      <article class="block twocol">
+        <h2 class="section-title">Motivational Example</h2>
+        <p>
+          Imagine a recruiter asks: “Can you take raw scientific data and ship a model pipeline?”
+          This project is my answer: from MATLAB extraction to model comparison and reporting, with clear checkpoints and diagnostics.
+        </p>
+        <p>
+          <strong>Outcome:</strong> A reusable template for biosignal product prototyping and ML experimentation.
+        </p>
+      </article>
+
+      <article class="block full">
+        <h2 class="section-title">Architecture Diagram (Draw.io style)</h2>
+        <div class="diagram">
+          <svg viewBox="0 0 1200 430" width="100%" role="img" aria-label="EEG Card Game architecture">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <path d="M0,0 L10,3 L0,6 z" fill="#111" />
+              </marker>
+            </defs>
+
+            <rect x="20" y="30" width="230" height="80" fill="#fff" stroke="#111" />
+            <text x="35" y="58" font-size="16" font-family="Helvetica">Raw MAT Sessions</text>
+            <text x="35" y="83" font-size="13" font-family="Helvetica">sessionevents01..22.mat</text>
+
+            <rect x="300" y="30" width="280" height="80" fill="#fff" stroke="#111" />
+            <text x="315" y="58" font-size="16" font-family="Helvetica">Extraction + QC</text>
+            <text x="315" y="83" font-size="13" font-family="Helvetica">mat_to_csv_all_sessions.py</text>
+
+            <rect x="640" y="20" width="250" height="100" fill="#fff" stroke="#111" />
+            <text x="655" y="50" font-size="16" font-family="Helvetica">Reports</text>
+            <text x="655" y="72" font-size="13" font-family="Helvetica">qc_mat_extract.csv</text>
+            <text x="655" y="92" font-size="13" font-family="Helvetica">labels_uniques_top30.xlsx</text>
+
+            <rect x="300" y="170" width="280" height="95" fill="#fff" stroke="#111" />
+            <text x="315" y="199" font-size="16" font-family="Helvetica">Dataset Engineering</text>
+            <text x="315" y="221" font-size="13" font-family="Helvetica">prepare_dataset_v3.py</text>
+            <text x="315" y="241" font-size="13" font-family="Helvetica">build_dataset.py (legacy)</text>
+
+            <rect x="640" y="170" width="250" height="95" fill="#fff" stroke="#111" />
+            <text x="655" y="199" font-size="16" font-family="Helvetica">NPZ Outputs</text>
+            <text x="655" y="221" font-size="13" font-family="Helvetica">v4_eventsplit_* / dataset_role_eventtype</text>
+
+            <rect x="940" y="170" width="240" height="95" fill="#fff" stroke="#111" />
+            <text x="955" y="199" font-size="16" font-family="Helvetica">Model Training</text>
+            <text x="955" y="221" font-size="13" font-family="Helvetica">train_eval_v3.py</text>
+            <text x="955" y="241" font-size="13" font-family="Helvetica">CNN + Transformer</text>
+
+            <rect x="940" y="315" width="240" height="85" fill="#fff" stroke="#111" />
+            <text x="955" y="345" font-size="16" font-family="Helvetica">Deliverables</text>
+            <text x="955" y="367" font-size="13" font-family="Helvetica">metrics CSV + checkpoints</text>
+
+            <line x1="250" y1="70" x2="300" y2="70" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="580" y1="70" x2="640" y2="70" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="440" y1="110" x2="440" y2="170" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="580" y1="217" x2="640" y2="217" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="890" y1="217" x2="940" y2="217" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="1060" y1="265" x2="1060" y2="315" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
+          </svg>
+        </div>
+        <p><small>Editable source for this flow is included as <code>docs/architecture.drawio</code>.</small></p>
+      </article>
+
+      <article class="block twocol">
+        <h2 class="section-title">Technical Skills Demonstrated</h2>
+        <div class="skills">
+          <div><strong>Data Engineering</strong><br/>MATLAB parsing, schema validation, derived features, robust preprocessing.</div>
+          <div><strong>ML Modeling</strong><br/>CNN/Transformer experiments, class weighting, balanced metrics, leakage checks.</div>
+          <div><strong>MLOps Mindset</strong><br/>Repeatable scripts, checkpoints, report generation, reproducible runbook.</div>
+        </div>
+      </article>
+
+      <article class="block twocol">
+        <h2 class="section-title">How I Built It</h2>
+        <table>
+          <thead>
+            <tr><th>Phase</th><th>What I implemented</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1. Ingestion</td><td>Loaded EEG tensors and labels from MAT files with shape checks.</td></tr>
+            <tr><td>2. Labeling</td><td>Mapped each player-event pair to role classes (played/next/observer).</td></tr>
+            <tr><td>3. Dataset split</td><td>Built event-wise train/test split to reduce leakage risk.</td></tr>
+            <tr><td>4. Training</td><td>Compared CNN baseline vs patch-based Transformer models.</td></tr>
+            <tr><td>5. Evaluation</td><td>Tracked Accuracy, Balanced Accuracy, Macro-F1, confusion matrix.</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="block full">
+        <h2 class="section-title">Why this matters</h2>
+        <p>
+          This project demonstrates <strong>end-to-end ownership</strong>: problem framing, data reliability, feature pipeline design, model experimentation,
+          and communication of outcomes. It reflects how I would execute in a production-minded ML role.
+        </p>
+      </article>
+    </section>
+
+    <p class="footer">Designed in a Swiss International style for GitHub Pages • Docs entrypoint: <code>docs/index.html</code></p>
+  </main>
+</body>
+</html>

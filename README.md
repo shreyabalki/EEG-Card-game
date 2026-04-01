@@ -270,3 +270,24 @@ After cleanup, rerun the pipeline steps above.
 - Add expected metric table from the latest best runs.
 - Add figure artifacts directly in README once stable results are available.
 
+
+---
+
+## 12) GitHub Pages hosting (for recruiter-facing project site)
+
+A recruiter-facing page is now available in:
+
+- `docs/index.html`
+- `docs/styles.css`
+- `docs/architecture.drawio`
+
+To publish it on GitHub Pages:
+
+1. Push this branch to GitHub.
+2. Open **Repository Settings → Pages**.
+3. Under **Build and deployment**, choose:
+   - **Source**: *Deploy from a branch*
+   - **Branch**: `main` (or your default branch)
+   - **Folder**: `/docs`
+4. Save, wait for deployment, and open the generated site URL.
+
