@@ -312,35 +312,7 @@ Confusion matrices and per-class F1 scores are saved with each run.
 
 ---
 
-## Resume Bullets
 
-```
-• Built end-to-end EEG classification pipeline in PyTorch — from MATLAB ingestion
-  through CNN/Transformer training — achieving passive player role detection in a
-  3-player card game using only raw brainwave signals.
-
-• Engineered event-wise stratified train/test splits across 22 EEG sessions to
-  eliminate temporal data leakage and ensure unbiased model evaluation.
-
-• Designed and benchmarked two neural architectures (Conv1D CNN and Patch Transformer)
-  on 32-channel, 801-sample biosignal time series, tracking balanced accuracy,
-  macro-F1, and per-class confusion matrices.
-
-• Authored 14 modular Python scripts covering MATLAB ingestion, dataset QC, model
-  training, and sequence analysis — all parameterized via argparse CLI interfaces.
-
-• Implemented reproducible ML experiment workflow with AdamW optimizer and early
-  stopping, generating per-run metrics CSVs and model checkpoints for systematic
-  architecture comparison.
-```
-
----
-
-## ATS / Recruiter Keywords
-
-`EEG` · `Brain-Computer Interface` · `BCI` · `PyTorch` · `Deep Learning` · `CNN` · `Transformer` · `Biosignal Processing` · `MATLAB` · `Signal Processing` · `scikit-learn` · `Time Series Classification` · `Machine Learning Pipeline` · `MNE-Python` · `Data Engineering` · `Neuroscience` · `AdamW` · `Cognitive Load Detection` · `End-to-End ML`
-
----
 
 ## License
 
