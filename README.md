@@ -320,4 +320,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-*Portfolio site: [shreyabalki.github.io/eeg-card-game](https://shreyabalki.github.io/eeg-card-game)*
+*Portfolio site: (https://shreyabalki.github.io/EEG-Card-game/#problem)*
