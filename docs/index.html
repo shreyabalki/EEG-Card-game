@@ -1,133 +1,375 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EEG Card Game — Portfolio Case Study</title>
-  <meta name="description" content="Swiss-style portfolio case study for EEG Card Game ML project." />
-  <link rel="stylesheet" href="styles.css" />
+  <title>EEG Card Game · ML Portfolio</title>
+  <meta name="description" content="End-to-end EEG machine learning pipeline for player role classification in a multiplayer card game. PyTorch CNN + Transformer." />
+  <meta property="og:title" content="EEG Card Game · ML Portfolio" />
+  <meta property="og:description" content="Classifying player intent in a multiplayer card game using deep learning on raw brainwave signals." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portfolio.css" />
 </head>
 <body>
-  <main class="page">
-    <section class="grid block hero">
-      <div class="kicker">Portfolio Case Study · Applied ML · EEG</div>
-      <h1>EEG Card Game<br/>Decision Intelligence</h1>
-      <p class="hero-note">
-        I designed and implemented an end-to-end EEG machine learning workflow that turns raw multi-player brain-signal sessions into role prediction models.
-        The system is built for reproducible research and readable engineering.
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="nav-logo">EEG Card Game</span>
+      <div class="nav-links">
+        <a href="#problem">Problem</a>
+        <a href="#solution">Solution</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#tech">Tech Stack</a>
+        <a href="#impact">Impact</a>
+        <a href="https://github.com/shreyabalki/eeg-card-game" target="_blank" rel="noopener" class="btn-nav">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badges">
+        <span class="badge badge-purple">Neuroscience × ML</span>
+        <span class="badge badge-blue">PyTorch</span>
+        <span class="badge badge-green">Brain-Computer Interface</span>
+      </div>
+      <h1 class="hero-title">
+        Decoding Player Roles<br />from Raw Brainwaves
+      </h1>
+      <p class="hero-sub">
+        An end-to-end deep learning pipeline that classifies each player's cognitive role
+        in a 3-player card game — using only 32-channel EEG signals and no game state.
       </p>
-    </section>
-
-    <section class="grid" style="margin-top:18px;">
-      <article class="block twocol">
-        <h2 class="section-title">Project Idea</h2>
-        <p>
-          During a 3-player card game, each event contains EEG from all players. The challenge is to classify each player's role:
-          <span class="highlight">played</span>, <span class="highlight">next/current</span>, or <span class="highlight">observer</span>.
-        </p>
-        <p>
-          This mirrors real-world applied ML: noisy sensors, event context, class imbalance, and strict leakage prevention.
-        </p>
-      </article>
-
-      <article class="block twocol">
-        <h2 class="section-title">Motivational Example</h2>
-        <p>
-          Imagine a recruiter asks: “Can you take raw scientific data and ship a model pipeline?”
-          This project is my answer: from MATLAB extraction to model comparison and reporting, with clear checkpoints and diagnostics.
-        </p>
-        <p>
-          <strong>Outcome:</strong> A reusable template for biosignal product prototyping and ML experimentation.
-        </p>
-      </article>
-
-      <article class="block full">
-        <h2 class="section-title">Architecture Diagram (Draw.io style)</h2>
-        <div class="diagram">
-          <svg viewBox="0 0 1200 430" width="100%" role="img" aria-label="EEG Card Game architecture">
-            <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                <path d="M0,0 L10,3 L0,6 z" fill="#111" />
-              </marker>
-            </defs>
-
-            <rect x="20" y="30" width="230" height="80" fill="#fff" stroke="#111" />
-            <text x="35" y="58" font-size="16" font-family="Helvetica">Raw MAT Sessions</text>
-            <text x="35" y="83" font-size="13" font-family="Helvetica">sessionevents01..22.mat</text>
-
-            <rect x="300" y="30" width="280" height="80" fill="#fff" stroke="#111" />
-            <text x="315" y="58" font-size="16" font-family="Helvetica">Extraction + QC</text>
-            <text x="315" y="83" font-size="13" font-family="Helvetica">mat_to_csv_all_sessions.py</text>
-
-            <rect x="640" y="20" width="250" height="100" fill="#fff" stroke="#111" />
-            <text x="655" y="50" font-size="16" font-family="Helvetica">Reports</text>
-            <text x="655" y="72" font-size="13" font-family="Helvetica">qc_mat_extract.csv</text>
-            <text x="655" y="92" font-size="13" font-family="Helvetica">labels_uniques_top30.xlsx</text>
-
-            <rect x="300" y="170" width="280" height="95" fill="#fff" stroke="#111" />
-            <text x="315" y="199" font-size="16" font-family="Helvetica">Dataset Engineering</text>
-            <text x="315" y="221" font-size="13" font-family="Helvetica">prepare_dataset_v3.py</text>
-            <text x="315" y="241" font-size="13" font-family="Helvetica">build_dataset.py (legacy)</text>
-
-            <rect x="640" y="170" width="250" height="95" fill="#fff" stroke="#111" />
-            <text x="655" y="199" font-size="16" font-family="Helvetica">NPZ Outputs</text>
-            <text x="655" y="221" font-size="13" font-family="Helvetica">v4_eventsplit_* / dataset_role_eventtype</text>
-
-            <rect x="940" y="170" width="240" height="95" fill="#fff" stroke="#111" />
-            <text x="955" y="199" font-size="16" font-family="Helvetica">Model Training</text>
-            <text x="955" y="221" font-size="13" font-family="Helvetica">train_eval_v3.py</text>
-            <text x="955" y="241" font-size="13" font-family="Helvetica">CNN + Transformer</text>
-
-            <rect x="940" y="315" width="240" height="85" fill="#fff" stroke="#111" />
-            <text x="955" y="345" font-size="16" font-family="Helvetica">Deliverables</text>
-            <text x="955" y="367" font-size="13" font-family="Helvetica">metrics CSV + checkpoints</text>
-
-            <line x1="250" y1="70" x2="300" y2="70" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-            <line x1="580" y1="70" x2="640" y2="70" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-            <line x1="440" y1="110" x2="440" y2="170" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-            <line x1="580" y1="217" x2="640" y2="217" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-            <line x1="890" y1="217" x2="940" y2="217" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-            <line x1="1060" y1="265" x2="1060" y2="315" stroke="#111" stroke-width="2" marker-end="url(#arrow)"/>
-          </svg>
+      <div class="hero-cta">
+        <a href="https://github.com/shreyabalki/eeg-card-game" target="_blank" rel="noopener" class="btn-primary">
+          View on GitHub
+        </a>
+        <a href="#architecture" class="btn-secondary">See Architecture</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">22</span>
+          <span class="stat-label">EEG Sessions</span>
         </div>
-        <p><small>Editable source for this flow is included as <code>docs/architecture.drawio</code>.</small></p>
-      </article>
-
-      <article class="block twocol">
-        <h2 class="section-title">Technical Skills Demonstrated</h2>
-        <div class="skills">
-          <div><strong>Data Engineering</strong><br/>MATLAB parsing, schema validation, derived features, robust preprocessing.</div>
-          <div><strong>ML Modeling</strong><br/>CNN/Transformer experiments, class weighting, balanced metrics, leakage checks.</div>
-          <div><strong>MLOps Mindset</strong><br/>Repeatable scripts, checkpoints, report generation, reproducible runbook.</div>
+        <div class="stat">
+          <span class="stat-num">32</span>
+          <span class="stat-label">EEG Channels</span>
         </div>
-      </article>
+        <div class="stat">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Neural Architectures</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">Dataset Variants</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">14</span>
+          <span class="stat-label">Pipeline Scripts</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      <article class="block twocol">
-        <h2 class="section-title">How I Built It</h2>
-        <table>
-          <thead>
-            <tr><th>Phase</th><th>What I implemented</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1. Ingestion</td><td>Loaded EEG tensors and labels from MAT files with shape checks.</td></tr>
-            <tr><td>2. Labeling</td><td>Mapped each player-event pair to role classes (played/next/observer).</td></tr>
-            <tr><td>3. Dataset split</td><td>Built event-wise train/test split to reduce leakage risk.</td></tr>
-            <tr><td>4. Training</td><td>Compared CNN baseline vs patch-based Transformer models.</td></tr>
-            <tr><td>5. Evaluation</td><td>Tracked Accuracy, Balanced Accuracy, Macro-F1, confusion matrix.</td></tr>
-          </tbody>
-        </table>
-      </article>
+  <!-- PROBLEM -->
+  <section id="problem" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The Challenge</span>
+        <h2>Can a neural network read cognitive intent from passive EEG?</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <h3>The Research Question</h3>
+          <p>
+            During a card game, each player is in a different cognitive state depending on their role:
+            the one who just played, the one whose turn is next, or the one passively observing.
+            These subtle differences produce detectable EEG signatures — but can a model learn them?
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h3>Why It Matters</h3>
+          <p>
+            Passive cognitive state decoding is a core challenge in BCI research. Unlike explicit
+            motor imagery tasks, players here have no BCI intent — the signal is ambient and naturalistic.
+            Success generalizes to adaptive interfaces, cognitive load monitoring, and neuroergonomics.
+          </p>
+        </div>
+      </div>
+      <div class="role-table">
+        <h3>Classification Target: Three Cognitive Roles</h3>
+        <div class="role-row">
+          <div class="role-badge role-0">Label 0</div>
+          <div class="role-name">Played</div>
+          <div class="role-desc">Player who just took a turn — post-decision state, reduced active attention</div>
+        </div>
+        <div class="role-row">
+          <div class="role-badge role-1">Label 1</div>
+          <div class="role-name">Current / Next</div>
+          <div class="role-desc">Player whose turn is active or imminent — heightened anticipation and engagement</div>
+        </div>
+        <div class="role-row">
+          <div class="role-badge role-2">Label 2</div>
+          <div class="role-name">Observer</div>
+          <div class="role-desc">Passive player — monitoring but not acting, lower cognitive load</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <article class="block full">
-        <h2 class="section-title">Why this matters</h2>
+  <!-- SOLUTION -->
+  <section id="solution" class="section section-dark">
+    <div class="container">
+      <div class="section-header section-header-light">
+        <span class="section-tag section-tag-light">The Solution</span>
+        <h2 class="text-light">Full pipeline from raw MATLAB to trained classifier</h2>
+      </div>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h4>Data Ingestion</h4>
+            <p>Parse 22 MATLAB session files into NumPy tensors. Validate shapes, detect NaN values, check timing consistency. Auto-generate QC reports.</p>
+            <code>mat_to_csv_all_sessions.py</code>
+          </div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h4>Dataset Engineering</h4>
+            <p>Reshape 4D tensors to sample arrays. Assign role labels. Perform event-wise stratified splitting to prevent temporal leakage.</p>
+            <code>prepare_dataset_v3.py</code>
+          </div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h4>Model Training</h4>
+            <p>Train CNN and Transformer architectures via unified CLI. AdamW optimizer, early stopping on Macro-F1, full metrics logging.</p>
+            <code>train_eval_v3.py</code>
+          </div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h4>Evaluation</h4>
+            <p>Metrics per run: Accuracy, Balanced Accuracy, Macro-F1, per-class confusion matrix. Results accumulated in CSV for comparison.</p>
+            <code>results CSV + .pt checkpoints</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="architecture" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2>Two Architectures, One Unified Trainer</h2>
+      </div>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <div class="arch-label">Architecture 1</div>
+          <h3>Conv1D CNN</h3>
+          <div class="arch-flow">
+            <div class="arch-layer">Input (B, 32ch, 801t)</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Conv1d 32→64, k=7 · BN · ELU · MaxPool</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Conv1d 64→128, k=5 · BN · ELU · MaxPool</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Conv1d 128→256, k=3 · BN · ELU · AdaptivePool</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer arch-output">Linear(256 → n_classes)</div>
+          </div>
+          <p class="arch-note">Local temporal feature extraction. Fast to train. Strong inductive bias for sequential signals.</p>
+        </div>
+
+        <div class="arch-card">
+          <div class="arch-label">Architecture 2</div>
+          <h3>Patch Transformer</h3>
+          <div class="arch-flow">
+            <div class="arch-layer">Input (B, 32ch, 801t)</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Patch Embedding: ~16 patches × (32 × 50)</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Linear Projection → d_model=128</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">TransformerEncoder: 4 heads, 2 layers, ff=256</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">Mean Pool over patches</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer arch-output">Linear(128 → n_classes)</div>
+          </div>
+          <p class="arch-note">Global temporal attention via patches. Captures long-range EEG dependencies efficiently.</p>
+        </div>
+      </div>
+
+      <div class="key-decision">
+        <h3>Key Engineering Decision: Event-Wise Splits</h3>
         <p>
-          This project demonstrates <strong>end-to-end ownership</strong>: problem framing, data reliability, feature pipeline design, model experimentation,
-          and communication of outcomes. It reflects how I would execute in a production-minded ML role.
+          Random sample-level splits would allow EEG from the same card game event to appear in both train
+          and test sets — creating temporal leakage. Instead, entire events are grouped and held out,
+          ensuring the model genuinely generalizes to unseen game moments.
         </p>
-      </article>
-    </section>
+        <div class="split-visual">
+          <div class="split-bad">
+            <span class="split-label split-bad-label">❌ Random Split (Leaky)</span>
+            <div class="split-events">
+              <span class="ev train">E1-P1</span><span class="ev test">E1-P2</span><span class="ev train">E1-P3</span>
+              <span class="ev test">E2-P1</span><span class="ev train">E2-P2</span><span class="ev test">E2-P3</span>
+            </div>
+            <small>Same event in both splits</small>
+          </div>
+          <div class="split-good">
+            <span class="split-label split-good-label">✓ Event-Wise Split (Clean)</span>
+            <div class="split-events">
+              <span class="ev train">E1-P1</span><span class="ev train">E1-P2</span><span class="ev train">E1-P3</span>
+              <span class="ev test">E2-P1</span><span class="ev test">E2-P2</span><span class="ev test">E2-P3</span>
+            </div>
+            <small>Entire events held out together</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <p class="footer">Designed in a Swiss International style for GitHub Pages • Docs entrypoint: <code>docs/index.html</code></p>
-  </main>
+  <!-- TECH STACK -->
+  <section id="tech" class="section section-mid">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Technologies</span>
+        <h2>Stack</h2>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <div class="tech-icon">🔥</div>
+          <div class="tech-name">PyTorch</div>
+          <div class="tech-role">Model training, Conv1d, TransformerEncoder</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">🔢</div>
+          <div class="tech-name">NumPy / SciPy</div>
+          <div class="tech-role">Array ops, MATLAB file loading</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">📊</div>
+          <div class="tech-name">scikit-learn</div>
+          <div class="tech-role">Balanced accuracy, Macro-F1, confusion matrix</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">🐼</div>
+          <div class="tech-name">Pandas</div>
+          <div class="tech-role">Tabular QC reports, label analysis</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">🧪</div>
+          <div class="tech-name">MNE-Python</div>
+          <div class="tech-role">EEG-specific processing utilities</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">📈</div>
+          <div class="tech-name">Matplotlib / Seaborn</div>
+          <div class="tech-role">Metric visualization, result plots</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section id="impact" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Impact &amp; Outcomes</span>
+        <h2>What This Demonstrates</h2>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-icon">🔬</div>
+          <h4>Research Rigor</h4>
+          <p>Event-wise stratified splits prevent leakage. Balanced accuracy and Macro-F1 handle class imbalance honestly. Reproducible via fixed seeds and pinned dependencies.</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">⚙️</div>
+          <h4>Engineering Quality</h4>
+          <p>14 modular scripts with argparse CLIs, logging, and clear output artifacts. Separation of concerns across ingestion, dataset building, training, and analysis.</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🎯</div>
+          <h4>End-to-End Ownership</h4>
+          <p>Single developer: problem framing, data pipeline, architecture design, training, evaluation, and documentation — the full stack of an ML project.</p>
+        </div>
+        <div class="impact-card">
+          <div class="impact-icon">🧩</div>
+          <h4>Domain Complexity</h4>
+          <p>Working with real neurophysiology data requires domain knowledge: EEG artifacts, epoch structure, multi-player synchronization, and cognitive state mapping.</p>
+        </div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-box">
+          <div class="metric-val">22</div>
+          <div class="metric-desc">MATLAB sessions processed automatically</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">5</div>
+          <div class="metric-desc">Dataset variants from a single pipeline run</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">2</div>
+          <div class="metric-desc">Neural architectures systematically compared</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">0</div>
+          <div class="metric-desc">Game state features used — only raw EEG</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUME BULLETS -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header section-header-light">
+        <span class="section-tag section-tag-light">Resume Highlights</span>
+        <h2 class="text-light">What This Project Proves</h2>
+      </div>
+      <ul class="resume-list">
+        <li>Built end-to-end EEG classification pipeline in PyTorch — MATLAB ingestion through CNN/Transformer training — for passive player role detection using only raw brainwave signals.</li>
+        <li>Engineered event-wise stratified train/test splits across 22 EEG sessions to eliminate temporal data leakage and ensure unbiased model evaluation.</li>
+        <li>Designed and benchmarked two neural architectures (Conv1D CNN and Patch Transformer) on 32-channel, 801-sample biosignal time series.</li>
+        <li>Authored 14 modular Python scripts covering data QC, dataset engineering, model training, and sequence analysis — all parameterized via argparse CLI.</li>
+        <li>Implemented reproducible ML experiment workflow with AdamW + early stopping, generating per-run metrics CSVs and checkpoints for systematic comparison.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>EEG Card Game</strong>
+        <span class="footer-sep">·</span>
+        EEG × Deep Learning × BCI
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/shreyabalki/eeg-card-game" target="_blank" rel="noopener">GitHub</a>
+        <a href="architecture.md">Architecture</a>
+        <a href="setup.md">Setup Guide</a>
+        <a href="roadmap.md">Roadmap</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
