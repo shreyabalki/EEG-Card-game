@@ -17,8 +17,4 @@ for k in sorted(mat.keys()):
         continue
     v = mat[k]
     shape = getattr(v, "shape", None)
-<<<<<<< HEAD
     print(f"- {k}: type={type(v).__name__}, shape={shape}")
-=======
-    print(f"- {k}: type={type(v).__name__}, shape={shape}")
->>>>>>> 1733f74 (first commit)

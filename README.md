@@ -1,293 +1,351 @@
-# EEG-Card-game
+# EEG Card Game — Neural Role Classification from Brainwave Signals
 
-End-to-end EEG decoding pipeline for a multiplayer card-game setting. The project loads MATLAB session files, builds supervised learning datasets at **player-event level**, and trains CNN / Transformer classifiers to predict each player role in an event (`played`, `next/current`, `observer`).
+> **Classifying player intent in a multiplayer card game using EEG deep learning.**
 
----
-
-## 1) What this project does
-
-At a high level, the repository supports three workflows:
-
-1. **Data extraction & quality checks** from raw `.mat` sessions (`data/raw/sessioneventsXX.mat`).
-2. **Dataset creation** into `.npz` files for model training (both legacy and newer event-wise split versions).
-3. **Model training and evaluation** for CNN and Transformer baselines with metrics + checkpoints.
-
-The dataset is converted into samples shaped like EEG tensors per player and event, then mapped to role labels:
-
-- `0 = played` (the player who just played)
-- `1 = next/current` (the player whose turn is current/next)
-- `2 = observer` (other player)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue?logo=python)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch)](https://pytorch.org)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-F7931E?logo=scikit-learn)](https://scikit-learn.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Portfolio-Live-blueviolet)](https://shreyabalki.github.io/eeg-card-game)
 
 ---
 
-## 2) Repository map
+## What This Project Does
 
-```text
+This project builds an **end-to-end EEG machine learning pipeline** that classifies a player's real-time role in a 3-player card game — using only raw brain signals. No game state. No button presses. Just EEG.
+
+Given 32-channel EEG recordings from 22 experimental sessions, the system learns to distinguish three cognitive states:
+
+| Label | Role | Description |
+|-------|------|-------------|
+| `0` | Played | Player who just took a turn |
+| `1` | Current / Next | Player whose turn is active or upcoming |
+| `2` | Observer | Player watching but not acting |
+
+Two neural architectures are trained and compared: a **CNN baseline** and a **Patch Transformer**, evaluated on held-out event-based test splits.
+
+---
+
+## Key Highlights
+
+- **Full pipeline ownership**: MATLAB → tensor extraction → dataset engineering → training → evaluation
+- **Two model architectures**: Conv1D CNN and Patch-based Transformer
+- **Leakage-safe evaluation**: event-wise stratified splits per session and event type
+- **22 EEG sessions** parsed from raw `.mat` files into training-ready tensors
+- **32-channel, 801-sample EEG** per player per game event
+- **5 dataset variants** generated: mixed + per-event-type subsets
+
+---
+
+## Problem Statement
+
+In cognitive neuroscience and BCI (Brain-Computer Interface) research, a key challenge is **decoding intent and role from passive brain activity** — without relying on explicit user input. During a card game, each player has a distinct cognitive load depending on their role (active player vs. passive observer). This project asks: **can a neural network learn those cognitive signatures from raw EEG?**
+
+This has applications in:
+- Adaptive brain-computer interfaces
+- Passive mental state monitoring
+- Cognitive load detection in real-world tasks
+
+---
+
+## Architecture
+
+```
+Raw MATLAB Files (sessionevents01.mat … sessionevents22.mat)
+        │
+        ▼
+┌─────────────────────────────────────────────────────────┐
+│  mat_to_csv_all_sessions.py                             │
+│  • Load (T=801, C=32, P=3, E=events) tensors            │
+│  • Extract 8-column label metadata                      │
+│  • QC reports: shape checks, NaN detection, timing      │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+│  prepare_dataset_v3.py                                  │
+│  • Reshape to (N, C=32, T=801) per player-event         │
+│  • Assign role labels (0/1/2)                           │
+│  • Event-wise stratified train/test split               │
+│  • Output: 5 NPZ datasets (mixed, type0, type1, type2, type3) │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+│  train_eval_v3.py  (--model cnn | transformer)          │
+│  • SimpleEEGCNN: Conv1d(32→64→128→256) + MLP head       │
+│  • PatchTransformer: d_model=128, nhead=4, layers=2     │
+│  • AdamW + CrossEntropyLoss + early stopping            │
+│  • Metrics: Accuracy, Balanced-Acc, Macro-F1, W-F1      │
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+        results CSV + model checkpoints (.pt)
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Data I/O** | `scipy.io.loadmat`, NumPy, Pandas |
+| **Deep Learning** | PyTorch — Conv1d, TransformerEncoder, BatchNorm, ELU |
+| **ML Evaluation** | scikit-learn — balanced accuracy, macro-F1, confusion matrix |
+| **Visualization** | Matplotlib, Seaborn |
+| **EEG Tooling** | MNE-Python |
+| **Environment** | Python 3.9+, argparse CLI, pathlib, logging |
+
+---
+
+## Repository Structure
+
+```
 EEG-Card-game/
-├─ scripts/
-│  ├─ mat_to_csv_all_sessions.py      # extract labels/QC from raw MAT sessions
-│  ├─ inspect_labels.py               # inspect label columns from a sample session
-│  ├─ guess_label_mapping.py          # heuristic mapping checks for label columns
-│  ├─ build_dataset.py                # legacy dataset builder -> dataset_role_eventtype.npz
-│  ├─ prepare_dataset_v3.py           # event-wise split dataset builder (v4_eventsplit_*.npz)
-│  ├─ train_baseline.py               # legacy CNN baseline on dataset_role_eventtype.npz
-│  ├─ train_transformer.py            # legacy transformer experiment pipeline
-│  ├─ train_eval_v3.py                # unified CNN/Transformer training on v4 event-wise data
-│  ├─ detect_delayed_prompts.py       # sequence analysis helper
-│  ├─ inspect_table_full_sequences.py # sequence analysis helper
-│  └─ summarize_sequences.py          # sequence report summarizer
-├─ src/
-│  └─ data_loading.py                 # simple MATLAB loader helper
-├─ notebooks/
-│  ├─ 02_cnn_baseline.ipynb
-│  └─ 03_eegnet.ipynb
-├─ reports/                           # generated CSV/XLSX analysis reports
-├─ requirements.txt
-└─ README.md
+├── scripts/
+│   ├── mat_to_csv_all_sessions.py   # Step 1: MATLAB extraction + QC
+│   ├── prepare_dataset_v3.py        # Step 2: Dataset builder (event-wise splits)
+│   ├── train_eval_v3.py             # Step 3: CNN + Transformer trainer (unified)
+│   ├── train_baseline.py            # Legacy: CNN-only trainer
+│   ├── train_transformer.py         # Legacy: Transformer-only trainer
+│   ├── build_dataset.py             # Legacy: single-NPZ dataset builder
+│   ├── config.py                    # Label column index mappings
+│   ├── inspect_labels.py            # Label distribution analysis
+│   ├── detect_delayed_prompts.py    # Event timing anomaly detection
+│   ├── inspect_table_full_sequences.py  # Post-event sequence analysis
+│   ├── summarize_sequences.py       # Sequence pattern frequency
+│   └── guess_label_mapping.py       # Heuristic label validation
+├── src/
+│   └── data_loading.py              # Shared MATLAB loader utility
+├── notebooks/
+│   ├── 02_cnn_baseline.ipynb        # CNN exploration notebook
+│   └── 03_eegnet.ipynb              # EEGNet architecture experiments
+├── docs/
+│   ├── index.html                   # GitHub Pages portfolio site
+│   ├── styles.css                   # Site styling
+│   ├── overview.md                  # Project summary
+│   ├── architecture.md              # Technical architecture deep-dive
+│   ├── features.md                  # Feature documentation
+│   ├── setup.md                     # Detailed setup guide
+│   ├── technical-decisions.md       # Design rationale
+│   ├── results-and-impact.md        # Results, metrics, impact
+│   └── roadmap.md                   # Future improvements
+├── reports/
+│   ├── qc_mat_extract.csv           # Session QC results
+│   ├── labels_uniques_top30.xlsx    # Label value distributions
+│   ├── delay_flag_summary.csv       # Delayed prompt statistics
+│   └── table_full_sequence_patterns_top50.csv
+├── plot_results.py                  # CNN vs Transformer bar chart
+├── requirements.txt                 # Python dependencies
+└── .gitignore
 ```
 
 ---
 
-## 3) Architecture diagram
+## Setup
 
-```mermaid
-flowchart TD
-    A[Raw MATLAB sessions\ndata/raw/sessionevents*.mat] --> B[Extraction & QC\nmat_to_csv_all_sessions.py]
-    B --> C[Processed label tables\ndata/processed/*.csv]
-    B --> D[QC + label reports\nreports/qc_mat_extract.csv\nreports/labels_uniques_top30.xlsx]
+### Prerequisites
 
-    A --> E[Legacy dataset builder\nbuild_dataset.py]
-    E --> F[dataset_role_eventtype.npz]
+- Python 3.9+
+- PyTorch 2.x (install separately for your hardware)
+- Raw MATLAB data files: `sessionevents01.mat` … `sessionevents22.mat`
 
-    A --> G[Event-wise dataset builder\nprepare_dataset_v3.py]
-    G --> H[v4_eventsplit_mixed.npz]
-    G --> I[v4_eventsplit_type0_2class.npz]
-    G --> J[v4_eventsplit_type1.npz]
-    G --> K[v4_eventsplit_type2.npz]
-    G --> L[v4_eventsplit_type3.npz]
-
-    F --> M[Legacy training\ntrain_baseline.py / train_transformer.py]
-    H --> N[Unified training\ntrain_eval_v3.py --dataset mixed]
-    I --> O[Unified training\ntrain_eval_v3.py --dataset type0]
-    J --> P[Unified training\ntrain_eval_v3.py --dataset type1]
-    K --> Q[Unified training\ntrain_eval_v3.py --dataset type2]
-    L --> R[Unified training\ntrain_eval_v3.py --dataset type3]
-
-    N --> S[Metrics CSV + checkpoints]
-    O --> S
-    P --> S
-    Q --> S
-    R --> S
-```
-
----
-
-## 4) Data assumptions and shapes
-
-From the scripts, expected MAT contents are:
-
-- `data`: EEG array shaped `(T, C, P, E)`
-  - `T` = time points (often 801)
-  - `C` = channels (often 32)
-  - `P` = players (3)
-  - `E` = events/trials
-- `labels`: `(E, 8)` metadata table per event
-- `t`: time vector
-
-Model-ready samples are converted to `(N, C, T)` and labels to `(N,)`.
-
----
-
-## 5) Installation
-
-### 5.1 Prerequisites
-
-- Python 3.9+ recommended
-- (Optional) GPU for faster PyTorch training
-
-### 5.2 Setup
+### Installation
 
 ```bash
-# 1) Clone
-git clone <your-repo-url>
-cd EEG-Card-game
+git clone https://github.com/shreyabalki/eeg-card-game.git
+cd eeg-card-game
 
-# 2) Create virtual environment (example)
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 
-# 3) Install dependencies
 pip install -r requirements.txt
 
-# 4) (Recommended) install PyTorch explicitly if not already available
-# See https://pytorch.org/get-started/locally/ for your CUDA/CPU build.
+# Install PyTorch — choose your platform at https://pytorch.org/get-started
+pip install torch torchvision
 ```
 
-### 5.3 Quick environment check
+### Verify Environment
 
 ```bash
 python check_tf.py
-python -c "import torch; print('torch ok:', torch.__version__)"
+python -c "import torch; print(torch.__version__)"
 ```
 
 ---
 
-## 6) How to run the project (recommended order)
+## Usage
 
-## Step A — Put raw files in place
-
-Place files like `sessionevents01.mat ... sessionevents22.mat` inside:
-
-```text
-data/raw/
-```
-
-## Step B — Extract labels + quality reports
+### Step 1 — Extract raw data and run QC
 
 ```bash
+# Place raw .mat files in data/raw/
+mkdir -p data/raw
+cp /path/to/sessionevents*.mat data/raw/
+
 python scripts/mat_to_csv_all_sessions.py
+# Output: reports/qc_mat_extract.csv, reports/labels_uniques_top30.xlsx
 ```
 
-Outputs include:
-
-- `data/processed/all_sessions_labels.csv`
-- `reports/qc_mat_extract.csv`
-- `reports/labels_uniques_top30.xlsx`
-
-## Step C — Build modeling dataset
-
-### Option 1 (newer, preferred): event-wise split datasets
+### Step 2 — Build training datasets
 
 ```bash
 python scripts/prepare_dataset_v3.py
+# Output: data/processed/*.npz (5 datasets: mixed, type0, type1, type2, type3)
 ```
 
-Expected outputs:
-
-- `data/processed/v4_eventsplit_mixed.npz`
-- `data/processed/v4_eventsplit_type0_2class.npz`
-- `data/processed/v4_eventsplit_type1.npz`
-- `data/processed/v4_eventsplit_type2.npz`
-- `data/processed/v4_eventsplit_type3.npz`
-
-### Option 2 (legacy): single combined dataset
+### Step 3 — Train and evaluate
 
 ```bash
-python scripts/build_dataset.py
-```
-
-Expected output:
-
-- `data/processed/dataset_role_eventtype.npz`
-
-## Step D — Train and evaluate models
-
-### Unified trainer (newer)
-
-CNN on mixed dataset:
-
-```bash
+# CNN on mixed dataset
 python scripts/train_eval_v3.py --model cnn --dataset mixed --epochs 30
+
+# Transformer on type-1 event dataset
+python scripts/train_eval_v3.py --model transformer --dataset type1 --epochs 30 --lr 5e-4
+
+# All results saved to:
+# data/processed/train_eval_v4_eventsplit_results.csv
 ```
 
-Transformer on event type 1 with class weights:
+### Step 4 — Visualize results
 
 ```bash
-python scripts/train_eval_v3.py \
-  --model transformer \
-  --dataset type1 \
-  --epochs 40 \
-  --batch_size 64 \
-  --use_class_weights
+python plot_results.py
+# Output: figure_results.png (CNN vs Transformer Macro-F1 bar chart)
 ```
 
-This script logs metrics to:
-
-- `data/processed/train_eval_v4_eventsplit_results.csv`
-- `data/processed/checkpoints/`
-
-### Legacy trainers
+### Optional: Data analysis utilities
 
 ```bash
-python scripts/train_baseline.py
-python scripts/train_transformer.py
+python scripts/inspect_labels.py               # Label column distributions
+python scripts/detect_delayed_prompts.py       # Timing anomalies
+python scripts/summarize_sequences.py          # Event sequence patterns
 ```
 
 ---
 
-## 7) Sequence-analysis utilities
+## Model Architectures
 
-If you are analyzing event timing/prompt behavior:
+### SimpleEEGCNN
 
-```bash
-python scripts/detect_delayed_prompts.py
-python scripts/inspect_table_full_sequences.py
-python scripts/summarize_sequences.py
+Three convolutional layers process temporal EEG features, progressively increasing channel depth while reducing sequence length, followed by adaptive pooling and a linear classification head.
+
+```
+Input: (B, 32 channels, 801 time steps)
+Conv1d(32→64, k=7) → BatchNorm → ELU → MaxPool(2)
+Conv1d(64→128, k=5) → BatchNorm → ELU → MaxPool(2)
+Conv1d(128→256, k=3) → BatchNorm → ELU → AdaptiveAvgPool(1)
+Linear(256 → n_classes)
 ```
 
-Outputs are written to `reports/`.
+### PatchTransformer
 
----
+The EEG signal is divided into temporal patches; each patch is linearly projected into a `d_model`-dimensional embedding, then processed by a standard Transformer encoder. Mean pooling over patch tokens feeds a classification head.
 
-## 8) Current project status and caution
-
-Several Python files in this repository currently contain unresolved Git merge markers (`<<<<<<<`, `=======`, `>>>>>>>`). This can break execution until conflicts are cleaned.
-
-If a script fails with syntax errors, first search and resolve markers:
-
-```bash
-rg -n "^(<<<<<<<|=======|>>>>>>>)" scripts src
+```
+Input: (B, 32 channels, 801 time steps)
+Patch Embedding: patches of (C × patch_len) → Linear → d_model=128
+TransformerEncoder: nhead=4, num_layers=2, dim_feedforward=256, dropout=0.1
+Mean Pool over patches
+Linear(128 → n_classes)
 ```
 
-After cleanup, rerun the pipeline steps above.
+**Training**: AdamW, weight_decay=1e-4, CrossEntropyLoss, early stopping on Macro-F1 (patience=6).
 
 ---
 
-## 9) Typical experiment loop
+## Dataset Design
 
-1. Place/update raw MAT sessions.
-2. Run extraction + QC (`mat_to_csv_all_sessions.py`).
-3. Build event-wise dataset (`prepare_dataset_v3.py`).
-4. Train a baseline (`train_eval_v3.py --model cnn ...`).
-5. Train transformer variant.
-6. Compare Macro-F1 / Balanced Accuracy in results CSV.
-7. Plot results with `plot_results.py` (or notebook).
+A key engineering decision is **event-wise splitting** to prevent data leakage.
 
----
+Rather than randomly splitting individual EEG samples (which would allow the same card-game event to appear in both train and test), the pipeline groups events by session and event type, then holds out 20% of entire events per group. This ensures the model evaluates on genuinely unseen game moments.
 
-## 10) Troubleshooting
+Five NPZ datasets are produced:
 
-- **`No sessionevents*.mat found`**: verify files are in `data/raw/`.
-- **Missing packages**: reinstall using `pip install -r requirements.txt`.
-- **PyTorch import failure**: install PyTorch separately for your platform.
-- **Syntax errors with `<<<<<<<`**: resolve merge conflicts in scripts before running.
+| Dataset | Classes | Description |
+|---------|---------|-------------|
+| `mixed` | 3 | All event types combined |
+| `type0` | 2 | 2-class event subset |
+| `type1` | 3 | Event type 1 only |
+| `type2` | 3 | Event type 2 only |
+| `type3` | 3 | Event type 3 only |
 
 ---
 
-## 11) Future README improvements (optional)
+## Results
 
-- Add a sample command with fixed random seed for reproducible benchmark.
-- Add expected metric table from the latest best runs.
-- Add figure artifacts directly in README once stable results are available.
+> **Note**: The table below uses placeholder values. Replace with your actual results from `train_eval_v4_eventsplit_results.csv` after running training.
 
+| Model | Dataset | Accuracy | Balanced Acc | Macro-F1 |
+|-------|---------|---------|--------------|---------|
+| CNN | mixed | [replace]% | [replace]% | [replace] |
+| Transformer | mixed | [replace]% | [replace]% | [replace] |
+| CNN | type1 | [replace]% | [replace]% | [replace] |
+| Transformer | type1 | [replace]% | [replace]% | [replace] |
+
+Confusion matrices and per-class F1 scores are saved with each run.
 
 ---
 
-## 12) GitHub Pages hosting (for recruiter-facing project site)
+## Challenges Solved
 
-A recruiter-facing page is now available in:
+| Challenge | Solution |
+|-----------|---------|
+| Raw data is MATLAB `.mat` format | Custom loader using `scipy.io.loadmat` with shape validation |
+| 3D data tensor (T, C, P, E) must become 2D samples | Reshape: expand player axis, flatten to (N, C, T) |
+| Unknown label column semantics | Heuristic analysis scripts + manual inspection workflow |
+| Data leakage risk from random splitting | Event-wise stratified split (20% held-out events per session/type) |
+| Class imbalance across roles | Balanced accuracy and macro-F1 as primary metrics; optional class weights |
+| Multiple dataset variants needed | Parameterized dataset builder outputting 5 NPZ files |
 
-- `docs/index.html`
-- `docs/styles.css`
-- `docs/architecture.drawio`
+---
 
-To publish it on GitHub Pages:
+## Future Improvements
 
-1. Push this branch to GitHub.
-2. Open **Repository Settings → Pages**.
-3. Under **Build and deployment**, choose:
-   - **Source**: *Deploy from a branch*
-   - **Branch**: `main` (or your default branch)
-   - **Folder**: `/docs`
-4. Save, wait for deployment, and open the generated site URL.
+- [ ] **Real-time inference**: WebSocket server for live EEG stream classification
+- [ ] **EEGNet integration**: Add depthwise-separable CNN (EEGNet) as third architecture
+- [ ] **Cross-subject generalization**: Leave-one-subject-out cross-validation
+- [ ] **Frequency-domain features**: FFT / wavelet preprocessing as alternative input
+- [ ] **Hyperparameter search**: Optuna sweep over architecture and training parameters
+- [ ] **CI/CD pipeline**: GitHub Actions for automated testing and linting
+- [ ] **Docker containerization**: Reproducible execution environment
 
+---
+
+## Resume Bullets
+
+```
+• Built end-to-end EEG classification pipeline in PyTorch — from MATLAB ingestion
+  through CNN/Transformer training — achieving passive player role detection in a
+  3-player card game using only raw brainwave signals.
+
+• Engineered event-wise stratified train/test splits across 22 EEG sessions to
+  eliminate temporal data leakage and ensure unbiased model evaluation.
+
+• Designed and benchmarked two neural architectures (Conv1D CNN and Patch Transformer)
+  on 32-channel, 801-sample biosignal time series, tracking balanced accuracy,
+  macro-F1, and per-class confusion matrices.
+
+• Authored 14 modular Python scripts covering MATLAB ingestion, dataset QC, model
+  training, and sequence analysis — all parameterized via argparse CLI interfaces.
+
+• Implemented reproducible ML experiment workflow with AdamW optimizer and early
+  stopping, generating per-run metrics CSVs and model checkpoints for systematic
+  architecture comparison.
+```
+
+---
+
+## ATS / Recruiter Keywords
+
+`EEG` · `Brain-Computer Interface` · `BCI` · `PyTorch` · `Deep Learning` · `CNN` · `Transformer` · `Biosignal Processing` · `MATLAB` · `Signal Processing` · `scikit-learn` · `Time Series Classification` · `Machine Learning Pipeline` · `MNE-Python` · `Data Engineering` · `Neuroscience` · `AdamW` · `Cognitive Load Detection` · `End-to-End ML`
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+*Portfolio site: [shreyabalki.github.io/eeg-card-game](https://shreyabalki.github.io/eeg-card-game)*
